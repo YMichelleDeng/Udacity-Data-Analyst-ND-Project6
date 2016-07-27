@@ -98,8 +98,8 @@ It would be better to show the average arrival/departure delay frequency line on
 http://dimplejs.org/advanced_examples_viewer.html?id=advanced_price_range_lollipop
 http://dimplejs.org/advanced_examples_viewer.html?id=advanced_storyboard_control
 http://dimplejs.org/examples_viewer.html?id=bars_vertical_floating
-https://github.com/d3/d3/wiki/Gallery
+https://discussions.udacity.com/t/page-is-not-displayed-properly-on-bl-ocks/174891/2
 http://bl.ocks.org/JasonCabral/964063d4534c899f8fd41d8e8b929336#index.html
 https://github.com/sebasibarguen/udacity-nanodegree-visualization
-https://discussions.udacity.com/t/page-is-not-displayed-properly-on-bl-ocks/174891/2
+https://github.com/d3/d3/wiki/Gallery
 
