@@ -31,7 +31,7 @@
 </style>
 
 <h1>
-  US Domestic Flight Delay in 2008
+  US Flight Delay in 2008
 </h1>
 <p>
 According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp" target="_blank">RITA flight delay information</a>, the average US domestic flight delay frequency in 2008 is <b>37.2%</b> for <b>departure</b> flights and <b>47.8%</b> for <b>arrival</b> flights. However, depending on which airports and airlines you have chosen, the delay frequency can vary from 0 to 100 percent! Moreover, this is independent from the volume of flights. Below you can explore the relationship between domestic <b>flight delay frequency</b> and the <b>volume of flights</b> among different airlines in the top 20 busiest airports.
@@ -126,10 +126,12 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
         y1.overrideMax = 100;
         
         var y2 = myChart.addMeasureAxis("y", "Flight Counts");
+        y2.tickFormat = ',.1f';
 
-        // Order the x axis
-        // x.addOrderRule("Flight Counts", true);
-        x.addOrderRule("Airline", false);
+        // Order the x axis 
+        // x.addOrderRule("Flight", true);
+        // x.addOrderRule("Airline", false);
+        x.addOrderRule("Delay Frequency (%), true");
 
         // Color the Flight Counts bars to be highly transparent
         myChart.assignColor("Flight", "#222222", "#000000", 0.2);
@@ -139,12 +141,10 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
         flight.aggregate = dimple.aggregateMethod.sum;
 
         // Add series for Delay Frequency (%)
-        var df = myChart.addSeries("Status", dimple.plot.bubble, [x, y1]);
+        // var df = myChart.addSeries("Status", dimple.plot.bubble, [x, y1]);
+        var df = myChart.addSeries("Status", dimple.plot.bar, [x, y1]);
+        df.stacked = false;
         df.aggregate = dimple.aggregateMethod.avg;
-
-        // Add series for Delay Counts to the first y axis
-        // var df = myChart.addSeries("Status", dimple.plot.bar, [x, y1]);
-        // df.aggregate = dimple.aggregateMethod.sum;
 
         // Add legend for status
         var myLegend = myChart.addLegend("105px", "2px", "200px", "200px", "left", df);
@@ -192,6 +192,15 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
             }
             firstTick = false;
         }
+
+/*        // Create the average Delay Frequency line chart
+        var line = new dimple.chart(svg, data);
+        line.setMargins("-90%", "6%", "30%", "32%");
+
+        var adf = line.addSeries("Status", dimple.plot.line, [x, y1]);
+        adf.aggregate = dimple.aggregateMethod.avg;
+        line.draw();*/
+
       };
 
     </script>
