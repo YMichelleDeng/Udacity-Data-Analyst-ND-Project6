@@ -19,15 +19,15 @@
     font-size: 30px;
     font-family: Helvetica;
   }
-
+/*
   label {
-    height: 30px;
+    height: 10px;
     position: relative;
     left: 19vw;
     width: 50px;
     padding: 10px;
     top: 2vh;
-  }
+  }*/
 </style>
 
 <h1>
@@ -36,12 +36,22 @@
 <p>
 According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp" target="_blank">RITA flight delay information</a>, the average US domestic flight delay frequency in 2008 is <b>37.2%</b> for <b>departure</b> flights and <b>47.8%</b> for <b>arrival</b> flights. However, depending on which airports and airlines you have chosen, the delay frequency can vary from 0 to 100 percent! Moreover, this is independent from the volume of flights. Below you can explore the relationship between domestic <b>flight delay frequency</b> and the <b>volume of flights</b> among different airlines in the top 20 busiest airports.
 </p>
-<p2>
-</p2>
-<label>
-</label>
+<!-- <label>
+</label> -->
 
 <body id="chartContainer">
+<!-- <body> -->
+
+    <div class="centerIsh" style="text-align:left;">
+        <button id='btn'>
+            Airline Order By Delay
+        </button>
+        <button id='btn1'>
+            Airline Order By Flight Count
+        </button>
+    </div>
+
+    <!-- <div id='chartContainer'></div> -->
     <script type="text/javascript">
 
     var svg = dimple.newSvg("#chartContainer", height = '100%', width = '100%');
@@ -117,7 +127,7 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
 
         // Create the main chart
         var myChart = new dimple.chart(svg, data);
-        myChart.setMargins("-90%", "6%", "30%", "32%");
+        myChart.setMargins("-90%", "10%", "30%", "28%");
 
         var x = myChart.addCategoryAxis("x", ["Airline","Status"]); 
         // var y1 = myChart.addMeasureAxis("y", "Delay Counts");
@@ -129,9 +139,14 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
         y2.tickFormat = ',.1f';
 
         // Order the x axis 
-        // x.addOrderRule("Flight", true);
-        // x.addOrderRule("Airline", false);
-        x.addOrderRule("Delay Frequency (%), true");
+        if (document.storyOrder === 1) {
+            // x.addOrderRule("Flight", true);
+            // x.addOrderRule("Airline", false);
+            // x.addOrderRule("Delay Frequency (%)", true);
+            x.addOrderRule("Flight Counts", true);
+        } else {
+        	x.addOrderRule("Delay Frequency (%)", true);
+        }
 
         // Color the Flight Counts bars to be highly transparent
         myChart.assignColor("Flight", "#222222", "#000000", 0.2);
@@ -147,7 +162,7 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
         df.aggregate = dimple.aggregateMethod.avg;
 
         // Add legend for status
-        var myLegend = myChart.addLegend("105px", "2px", "200px", "200px", "left", df);
+        var myLegend = myChart.addLegend("105px", "20px", "200px", "200px", "left", df);
 
         // Add a storyboard to the main chart and set the tick event
         var story = myChart.setStoryboard("Airport", onTick);
@@ -201,6 +216,23 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
         adf.aggregate = dimple.aggregateMethod.avg;
         line.draw();*/
 
+        // Add a click event to the storyOrder buttons
+        d3.select("#btn").on("click", function() {
+        	d3.select("#btn").style("opacity", 0.8);
+        	d3.select("#btn1").style("opacity", 0.2);
+        	document.storyOrder = 0;
+        	svg.selectAll("*").remove();
+        	d3.csv("flight2008_delay.csv", draw);
+        });
+
+        d3.select("#btn1").on("click", function() {
+        	d3.select("#btn1").style("opacity", 0.8);
+        	d3.select("#btn").style("opacity", 0.2);
+        	document.storyOrder = 1;
+        	svg.selectAll("*").remove();
+        	d3.csv("flight2008_delay.csv", draw);
+        });
+
       };
 
     </script>
@@ -212,6 +244,7 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
     Use D3 (not dimple.js) to load the CSV file
     and pass the contents of it to the draw function
     */
+  document.storyOrder = 1;
   d3.csv("flight2008_delay.csv", draw);
   </script>
 </body>
