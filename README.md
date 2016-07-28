@@ -22,10 +22,13 @@ This initial version took me quite a long time, especially in data wrangling and
 
 In this version, 1) the interval of y-axis for flight counts was changed to report exact number; 2) a floating bar chart was used to replace the bubbles for delay frequency, in order to align with the legend shape; 3) the x-axis for airlines was sorted by the average delay frequency across the 20 airports. 
 
+### Version 3
 
-## Feedback
+According to the feedbacks, in this version, a sorted function on airlines was added. Audiences can choose how to order the airlines in the x-axis. They can either order it by the average volume of flights or by the average delay frequency across the 20 airports.  
 
-I invited 4 persons with different backgrounds to comment on my visualization. According to their feedbacks, the most obvious problem was the accuracy of y-axis for flight counts, as the measurement interval was in a thousand rather than the exact number. The visual cues (i.e. bars and bubbles) were also less intuitive when I used two measure axis. In addition, an average delay frequency line and a sorting function on arrival/departure were requested by two audiences. Given that the airlines listed in x-axis should be independent to each other, unlike time series data, I would question whether a line chart is meaningful in this case. Therefore, I would rather make no change on adding this an average line here. 
+## Feedbacks
+
+I invited 4 persons with different backgrounds to comment on my visualization. According to their feedbacks, the most obvious problem was the accuracy of y-axis for flight counts, as the measurement interval was in a thousand rather than the exact number. The visual cues (i.e. bars and bubbles) were also less intuitive when I used two measure axis. In addition, an average delay frequency line and a sorting function on airlines were requested by two audiences. Given that the airlines listed in x-axis should be independent to each other, unlike time series data, I would question whether a line linked all the airlines is meaningful in this case. Therefore, I would rather make no change on adding this average line here. 
 
 ### Feedback 1
 
@@ -90,7 +93,7 @@ It's better to choose large airlines (more flight counts) as most of them will h
 4. Is there something you don’t understand in the graphic?
 Questions and suggestions:
 It’s better to show the exact number of Fight Counts for each airline on the bar chart, especially for the 0k case.
-It would be better to show the average arrival/departure delay frequency line on the chart, and also provide sorting function on arrival/departure for the user to choose airlines.
+It would be better to show the average arrival/departure delay frequency line on the chart, and also provide sorting function on airlines for the user to choose.
 
 
 ## Resources
@@ -98,8 +101,8 @@ It would be better to show the average arrival/departure delay frequency line on
 http://dimplejs.org/advanced_examples_viewer.html?id=advanced_price_range_lollipop
 http://dimplejs.org/advanced_examples_viewer.html?id=advanced_storyboard_control
 http://dimplejs.org/examples_viewer.html?id=bars_vertical_floating
-https://discussions.udacity.com/t/page-is-not-displayed-properly-on-bl-ocks/174891/2
 http://bl.ocks.org/JasonCabral/964063d4534c899f8fd41d8e8b929336#index.html
 https://github.com/sebasibarguen/udacity-nanodegree-visualization
+https://discussions.udacity.com/t/how-to-add-a-sorting-function-in-the-storyboard-function-using-dimple/180627/2
+https://discussions.udacity.com/t/page-is-not-displayed-properly-on-bl-ocks/174891/2
 https://github.com/d3/d3/wiki/Gallery
-
