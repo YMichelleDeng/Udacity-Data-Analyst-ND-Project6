@@ -19,30 +19,18 @@
     font-size: 30px;
     font-family: Helvetica;
   }
-/*
-  label {
-    height: 10px;
-    position: relative;
-    left: 19vw;
-    width: 50px;
-    padding: 10px;
-    top: 2vh;
-  }*/
 </style>
 
 <h1>
-  US Flight Delay in 2008
+  Airports with Longer Delays Tend to Have more Frequent Delays
 </h1>
+
 <p>
-According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp" target="_blank">RITA flight delay information</a> from the top 20 busiest airports in 2008, delay was very common in US domestic flights. In average, there were <b>40.6% departure delays</b> and <b>42.8% arrival delays</b>. The averaged time for <b>departure delay was 10.5 minutes</b> and <b>8.5 minutes for arrival delay</b>. Interestingly, the more often flight delayed in an airport, the longer delayed time it might take! 
+According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp" target="_blank">RITA flight delay information</a> from the top 20 busiest airports in 2008, delay was very common in US domestic flights. In average, the delay frequency of <b>arrival flights (42.8%)</b> was higher than <b>departure flights (40.6%)</b>. However, the averaged delayed time for <b>arrival flights (8.5 minutes)</b> was shorter than <b>departure flights (10.5 minutes)</b>. Interestingly, the more often flight delayed in an airport, the longer delayed time it might take! Moreover, there was no relationship between the total number of flights in an airport and its flight delays. Below you can find the relationship between <b>flight delay frequency</b> and <b>delay time</b> in the top 20 busiest airports. X-axis represents the average delay time for all departing and arriving flights. Y-axis represents the delay frequency. The circle size represents the total number of flights to and from the airport. 
 </p>
-<!-- <label>
-</label> -->
 
 <body id="chartContainer">
-<!-- <body> -->
 
-    <!-- <div id='chartContainer'></div> -->
     <script type="text/javascript">
 
     var svg = dimple.newSvg("#chartContainer", height = '100%', width = '100%');
@@ -53,16 +41,14 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
 	    var myChart = new dimple.chart(svg, data);
 	    myChart.setMargins("-90%", "8%", "20%", "10%");
 
-	    // var x = myChart.addCategoryAxis("x", "Average Delay (in min)");
 	    var x = myChart.addMeasureAxis("x", "Average Delay (in min)");
 	    var y = myChart.addMeasureAxis("y", "Delay Frequency (%)");
 	    var z = myChart.addMeasureAxis("z", "Flight Counts");
 	    x.tickFormat = ',.1f';
-	    y.overrideMin = 20;
 	    z.overrideMax = 500000;
 
 	    myChart.addSeries(["Airport", "Status"], dimple.plot.bubble);
-	    var myLegend = myChart.addLegend("818px", "60px", "120px", "200px",
+	    var myLegend = myChart.addLegend("85%", "15%", "10%", "20%",
 	        "right");
 
 	    myChart.draw();
@@ -143,6 +129,7 @@ According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.a
     and pass the contents of it to the draw function
     */
   d3.csv("flight2008_airport_agg.csv", draw);
+
   </script>
 </body>
 
