@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
+</head>
+
+ <style type="text/css">
+  #chartContainer {
+    margin: auto;
+    width: 80vw;
+    height: 65vh;
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 30px;
+    font-family: Helvetica;
+  }
+
+  label {
+    height: 30px;
+    position: relative;
+    left: 19vw;
+    width: 50px;
+    padding: 10px;
+    top: 2vh;
+  }
+</style>
+
+<h1>
+  US Flight Delay in 2008
+</h1>
+<p>
+According to the <a href="http://www.transtats.bts.gov/OT_Delay/OT_DelayCause1.asp" target="_blank">RITA flight delay information</a>, the average US domestic flight delay frequency in 2008 is <b>37.2%</b> for <b>departure</b> flights and <b>47.8%</b> for <b>arrival</b> flights. However, depending on which airports and airlines you have chosen, the delay frequency can vary from 0 to 100 percent! Moreover, this is independent from the volume of flights. Below you can explore the relationship between domestic <b>flight delay frequency</b> and the <b>volume of flights</b> among different airlines in the top 20 busiest airports.
+</p>
+<p2>
+</p2>
+<label>
+</label>
+
+<body id="chartContainer">
+    <script type="text/javascript">
+
+    var svg = dimple.newSvg("#chartContainer", height = '100%', width = '100%');
+
+      function draw(data) {
+
+          // Create the indicator chart on the right of the main chart
+          var indicator = new dimple.chart(svg, data);
+
+          // Pick gray [11] as the default and red [1] for the selected airport
+          var defaultColor = indicator.defaultColors[11];
+          var indicatorColor = indicator.defaultColors[1];
+
+          // The frame duration for the animation in milliseconds
+          var frame = 5000;
+
+          var firstTick = true;
+
+          // Place the indicator bar chart to the right
+          indicator.setMargins("80%", "15%", "40%", "18%");
+
+          // Add airport along the bar chart y axis
+          var y = indicator.addCategoryAxis("y", "Airport");
+          // y.addOrderRule("Airport", "ASCE");
+          y.addOrderRule("Flight Counts");
+
+          // Use Flight Counts for bar size and hide the axis
+          var x = indicator.addMeasureAxis("x", "Flight Counts");
+          x.hidden = true;
+
+          // Add the bars to the indicator and add event handlers
+          var s = indicator.addSeries(null, dimple.plot.bar);
+          s.addEventHandler("click", onClick);
+
+          // Draw the side chart
+          indicator.draw();
+
+          // Remove the title from the y axis
+          y.titleShape.remove();
+
+          // Remove the lines from the y axis
+          y.shapes.selectAll("line,path").remove();
+
+          // Move the y axis text inside the plot area
+          y.shapes.selectAll("text")
+                  .style("text-anchor", "start")
+                  .style("font-size", "11px")
+                  .attr("transform", "translate(18, 0.5)");
+
+          // This block simply adds the legend title. 
+          svg.selectAll("title_text")
+                  .data(["Top 20 Busiest Airports",
+                      "",
+                      " Click bar to select and pause.",
+                      " Click again to resume animation."])
+                  .enter()
+                  .append("text")
+                  .attr("x", "80%")
+                  .attr("y", function (d, i) { return 9 + i * 12; })
+                  .style("font-family", "sans-serif")
+                  .style("font-size", "10px")
+                  .style("color", "Black")
+                  .text(function (d) { return d; });
+
+          // Manually set the bar colors
+          s.shapes
+                  .attr("rx", 10)
+                  .attr("ry", 10)
+                  .style("fill", function (d) { return (d.y === "ATL" ? indicatorColor.fill : defaultColor.fill) })
+                  .style("stroke", function (d) { return (d.y === "ATL" ? indicatorColor.stroke : defaultColor.stroke) })
+                  .style("opacity", 0.4);
+
+
+        // Create the main chart
+        var myChart = new dimple.chart(svg, data);
+        myChart.setMargins("-90%", "6%", "30%", "32%");
+
+        var x = myChart.addCategoryAxis("x", ["Airline","Status"]); 
+        // var y1 = myChart.addMeasureAxis("y", "Delay Counts");
+        var y1 = myChart.addMeasureAxis("y", "Delay Frequency (%)");
+        y1.overrideMin = 0;
+        y1.overrideMax = 100;
+        
+        var y2 = myChart.addMeasureAxis("y", "Flight Counts");
+
+        // Order the x axis
+        // x.addOrderRule("Flight Counts", true);
+        x.addOrderRule("Airline", false);
+
+        // Color the Flight Counts bars to be highly transparent
+        myChart.assignColor("Flight", "#222222", "#000000", 0.2);
+      
+        // Add series for Flight Counts to the second y axis
+        var flight = myChart.addSeries("Flight", dimple.plot.bar, [x, y2]);
+        flight.aggregate = dimple.aggregateMethod.sum;
+
+        // Add series for Delay Frequency (%)
+        var df = myChart.addSeries("Status", dimple.plot.bubble, [x, y1]);
+        df.aggregate = dimple.aggregateMethod.avg;
+
+        // Add series for Delay Counts to the first y axis
+        // var df = myChart.addSeries("Status", dimple.plot.bar, [x, y1]);
+        // df.aggregate = dimple.aggregateMethod.sum;
+
+        // Add legend for status
+        var myLegend = myChart.addLegend("105px", "2px", "200px", "200px", "left", df);
+
+        // Add a storyboard to the main chart and set the tick event
+        var story = myChart.setStoryboard("Airport", onTick);
+
+        // Change the frame duration
+        story.frameDuration = frame;
+
+        // Order the storyboard by date
+        story.addOrderRule("Flight Counts","DESC");
+
+        myChart.draw();
+
+        // Orphan the legends as they are consistent but by default they will refresh on tick
+        myChart.legends = [];
+
+        // Remove the storyboard label because the chart will indicate the current airport instead of the label
+        story.storyLabel.remove();
+
+        // On click of the side chart
+        function onClick(e) {
+            // Pause the animation
+            story.pauseAnimation();
+            // If it is already selected resume the animation
+            // otherwise pause and move to the selected airport
+            if (e.yValue === story.getFrameValue()) {
+                story.startAnimation();
+            } else {
+                story.goToFrame(e.yValue);
+                story.pauseAnimation();
+            }
+        }
+
+        // On tick of the main charts storyboard
+        function onTick(e) {
+            if (!firstTick) {
+                // Color all shapes the same
+                s.shapes
+                        .transition()
+                        .duration(frame / 2)
+                        .style("fill", function (d) { return (d.y === e ? indicatorColor.fill : defaultColor.fill) })
+                        .style("stroke", function (d) { return (d.y === e ? indicatorColor.stroke : defaultColor.stroke) });
+            }
+            firstTick = false;
+        }
+      };
+
+    </script>
+</body>
+
+<body>
+  <script type="text/javascript">
+  /*
+    Use D3 (not dimple.js) to load the CSV file
+    and pass the contents of it to the draw function
+    */
+  d3.csv("flight2008_delay.csv", draw);
+  </script>
+</body>
+
+</html>
